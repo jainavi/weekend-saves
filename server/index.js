@@ -23,6 +23,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// ROUTES
+app.use("/auth", authRoutes);
+
 mongoose
   .connect(MONGO_CONNECT_URL)
   .then(() => {
