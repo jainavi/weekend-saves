@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/auth.js");
+const savesRoutes = require("./routes/saves");
 
 // CONFIGURATIONS
 const app = express();
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 // ROUTES
 app.use("/auth", authRoutes);
+app.use("/saves", savesRoutes);
 
 mongoose
   .connect(MONGO_CONNECT_URL)
