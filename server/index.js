@@ -28,6 +28,14 @@ app.use((req, res, next) => {
 app.use("/auth", authRoutes);
 app.use("/saves", savesRoutes);
 
+// MIDDLEWARES
+app.use((error, req, res, next) => { //Error Handler
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.messgae;
+  res.status(status).json({ message: message });
+});
+
 mongoose
   .connect(MONGO_CONNECT_URL)
   .then(() => {
