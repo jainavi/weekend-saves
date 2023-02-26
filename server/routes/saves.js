@@ -16,6 +16,7 @@ router.post("/post");
 // PUT /saves/:saveId
 router.put("/:saveId");
 
-router.delete("/delete/:saveId/:id", deleteSave);
+// DELETE /save/:saveId
+router.delete("/:saveId", deleteSave);
 
 module.exports = router;
