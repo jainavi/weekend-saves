@@ -9,4 +9,8 @@ const saveSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  modifiedContent: {
+    type: String,
+    default: null,
+  },
 });
