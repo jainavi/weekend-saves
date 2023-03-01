@@ -1,2 +1,6 @@
+# SERVER GITIGNORE
 server/node_modules
 server/tests
+
+# FRONTEND GITIGNORE
+frontend/node_modules
