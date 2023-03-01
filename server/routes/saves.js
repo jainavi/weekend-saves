@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { getAllPosts, deleteSave } = require("../controllers/saves");
+const { getAllPosts, deleteSave, postSave } = require("../controllers/saves");
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.get("/", getAllPosts);
 router.get("/:saveId");
 
 // POST /saves/post
-router.post("/post");
+router.post("/post", postSave);
 
 // PUT /saves/:saveId
 router.put("/:saveId");
