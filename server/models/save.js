@@ -1,16 +1,19 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const saveSchema = new Schema({
-  url: String,
-  title: String,
-  content: String,
-  modified: {
-    type: Boolean,
-    default: false,
+const saveSchema = new Schema(
+  {
+    url: String,
+    title: String,
+    content: String,
+    modifiedContent: {
+      type: String,
+      default: null,
+    },
+    image: String,
+    source: String,
   },
-  modifiedContent: {
-    type: String,
-    default: null,
-  },
-});
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Save", saveSchema);
