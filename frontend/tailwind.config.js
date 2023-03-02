@@ -6,7 +6,31 @@ module.exports = {
       fontFamily: {
         display: ["Inter var", "sans-serif"],
       },
+      colors: {
+        primary: "#7eb09b",
+        secondry: "#475B5A",
+        accent: "#ffd700",
+        neutral: "#ffffff",
+        active: "#fe5f55",
+        success: "#71EAC0",
+        error: "#F26E9A",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#7eb09b",
+          secondry: "#475B5A",
+          accent: "#ffd700",
+          neutral: "#ffffff",
+          active: "#fe5f55",
+          success: "#71EAC0",
+          error: "#F26E9A",
+        },
+      },
+    ],
+  },
 };
