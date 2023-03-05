@@ -4,14 +4,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import "./index.css";
 // import App from "./App";
-import Container from "./components/Container";
 import LoginPage from "./pages/Login/index";
-import NavBar from "./components/NavBar";
+import Navbar from "./components/navbar/Navbar";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <NavBar />,
+    element: <Navbar />,
     children: [{ path: "/login", element: <LoginPage /> }],
   },
 ]);
