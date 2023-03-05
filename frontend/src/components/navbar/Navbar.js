@@ -10,7 +10,7 @@ function Navbar() {
 
   return (
     <>
-      <div className="fixed w-full bg-neutral/[.1] backdrop-blur top-0 left-0">
+      <div className="fixed w-full bg-neutral/[.1] backdrop-blur top-0 left-0 z-10">
         <div className="mx-4 lg:mx-0 lg:px-8">
           <div className="navbar justify-between max-w-[90rem] mx-auto">
             <div className="flex-1 w-1/3">
