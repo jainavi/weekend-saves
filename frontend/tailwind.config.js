@@ -15,6 +15,9 @@ module.exports = {
         success: "#71EAC0",
         error: "#F26E9A",
       },
+      screens: {
+        maxSize: "1440px",
+      },
     },
   },
   plugins: [require("daisyui")],
