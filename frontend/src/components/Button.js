@@ -3,7 +3,7 @@ function Button({ onClick, type, color, size, extra, children }) {
     <button
       type={type}
       onClick={onClick}
-      className={`btn ${size} ${color} text-neutral text-base`}
+      className={`btn ${size} ${color} text-neutral text-base ${extra}`}
     >
       {children}
     </button>
