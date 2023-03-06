@@ -8,11 +8,14 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    getRegisterForm: (state) => {
+    showRegisterForm: (state) => {
       state.showLoginForm = false;
+    },
+    showLoginForm: (state) => {
+      state.showLoginForm = true;
     },
   },
 });
 
-export const { getRegisterForm } = authSlice.actions;
+export const { showRegisterForm, showLoginForm } = authSlice.actions;
 export default authSlice.reducer;
