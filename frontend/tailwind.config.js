@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         display: ["Inter var", "sans-serif"],
+        form: ["Montserrat", "san-serif"],
       },
       colors: {
         primary: "#7eb09b",
