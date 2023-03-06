@@ -21,7 +21,7 @@ function Navbar() {
 
             <div className="gap-2 bg-primary rounded-full px-1 lg:w-2/3 justify-around max-w-xl text-sm font-semibold text-neutral">
               <div
-                tabindex="1"
+                tabIndex="1"
                 className="transition-all flex justify-center gap-2 input rounded-full items-center w-10 pl-6  focus-within:w-28 focus-within:pl-2 lg:w-32 lg:focus-within:w-40 h-9 border-solid border-2 border-gray-400  hover:border-secondry focus-within:border-secondry"
               >
                 <AiOutlineSearch className="text-grayL flex-none transition-transform ease-in-out scale-150 hover:scale-[175%] hover:text-gray-500 hover:cursor-pointer" />
