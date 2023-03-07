@@ -5,6 +5,8 @@ import Card from "../../components/Card";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 
+import loginPageImage from "../../assets/images/loginPageImage.png";
+
 function LoginPage() {
   const { showLoginForm } = useSelector((store) => store.auth);
 
@@ -46,10 +48,7 @@ function LoginPage() {
           </div>
           <div className="grow flex justify-center">
             <div className="self-center relative max-w-4xl ">
-              <img
-                src="./images/reading-login-page-desktop.png"
-                alt="People Readin"
-              />
+              <img src={loginPageImage} alt="People Readin" />
               <Circle
                 size="w-[60%]"
                 color="bg-accent"
