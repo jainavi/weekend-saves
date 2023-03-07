@@ -8,7 +8,7 @@ import "./index.css";
 import App from "./App";
 import LoginPage from "./pages/login/index";
 import Navbar from "./components/navbar/Navbar";
-import HomePage from "./pages/home";
+import HomePage from "./pages/home/index";
 import LoginForm from "./pages/login/LoginForm";
 import RegisterForm from "./pages/login/RegisterForm";
 
