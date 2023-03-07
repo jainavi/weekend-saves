@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -14,9 +14,12 @@ function Navbar() {
         <div className="mx-4 lg:mx-0 lg:px-8">
           <div className="navbar justify-between max-w-[90rem] mx-auto">
             <div className="flex-1 w-1/3">
-              <a className="btn btn-ghost normal-case text-xl rounded-full text-secondry px-0">
+              <Link
+                to="/"
+                className="btn btn-ghost normal-case text-xl rounded-full text-secondry px-0"
+              >
                 Weekend-Saves
-              </a>
+              </Link>
             </div>
 
             <div className="gap-2 bg-primary rounded-full px-1 lg:w-2/3 justify-around max-w-xl text-sm font-semibold text-neutral">
@@ -32,12 +35,18 @@ function Navbar() {
                   className="lg:block outline-none text-black w-full"
                 />
               </div>
-              <div className="hidden lg:block box-content px-[5px] rounded transition ease-in-out hover:text-active cursor-pointer hover:scale-105">
+              <Link
+                to="/home"
+                className="hidden lg:block box-content px-[5px] rounded transition ease-in-out hover:text-active cursor-pointer hover:scale-105"
+              >
                 Home
-              </div>
-              <div className="hidden lg:block box-content px-[5px] rounded transition ease-in-out hover:text-active cursor-pointer hover:scale-105">
+              </Link>
+              <Link
+                to="/about-us"
+                className="hidden lg:block box-content px-[5px] rounded transition ease-in-out hover:text-active cursor-pointer hover:scale-105"
+              >
                 About Us
-              </div>
+              </Link>
 
               <div className="dropdown dropdown-end ">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
@@ -51,13 +60,19 @@ function Navbar() {
                   className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-primary rounded-box w-52"
                 >
                   <li>
-                    <a className="lg:hidden">Home</a>
+                    <Link to="/home" className="lg:hidden">
+                      Home
+                    </Link>
                   </li>
                   <li>
-                    <a className="justify-between">Profile</a>
+                    <Link to="/profile" className="justify-between">
+                      Profile
+                    </Link>
                   </li>
                   <li>
-                    <a className="lg:hidden">About Us</a>
+                    <Link to="/about-us" className="lg:hidden">
+                      About Us
+                    </Link>
                   </li>
                   <li>
                     <a>Logout</a>
