@@ -8,12 +8,28 @@ import "./index.css";
 import App from "./App";
 import LoginPage from "./pages/login/index";
 import Navbar from "./components/navbar/Navbar";
+import HomePage from "./pages/home";
+import LoginForm from "./pages/login/LoginForm";
+import RegisterForm from "./pages/login/RegisterForm";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Navbar />,
-    children: [{ path: "/login", element: <LoginPage /> }],
+    children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/home", element: <HomePage /> },
+      {
+        path: "/login",
+        element: <LoginPage />,
+        children: [{ path: "/login", element: <LoginForm /> }],
+      },
+      {
+        path: "/register",
+        element: <LoginPage />,
+        children: [{ path: "/register", element: <RegisterForm /> }],
+      },
+    ],
   },
 ]);
 
