@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  username: {
+  name: {
     type: String,
     required: true,
   },
@@ -13,6 +13,10 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: ture,
+  },
+  phoneNumber: {
+    type: Number,
+    required: true,
   },
   saves: [{ type: Schema.Types.ObjectId, ref: "Save" }],
 });
