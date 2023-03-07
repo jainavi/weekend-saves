@@ -20,7 +20,9 @@ function RegisterForm() {
         <Input name="password" placeholder="Password" />
         <Label htmlFor="phone number">Phone Number:</Label>
         <Input name="phoneNumber" placeholder="Phone Number" />
-        <Button type="submit" color="btn-accent" size="btn-block" extra="mt-3">
+        <Label htmlFor="name">Name:</Label>
+        <Input name="name" placeholder="Name" />
+        <Button type="submit" color="btn-accent" size="btn-block">
           Register
         </Button>
       </form>
