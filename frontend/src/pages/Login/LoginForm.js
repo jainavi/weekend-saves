@@ -1,14 +1,10 @@
-import { useDispatch } from "react-redux";
-
-import { showRegisterForm } from "../../slices/authSlice";
+import { Link } from "react-router-dom";
 
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Label from "../../components/Label";
 
 function LoginForm() {
-  const dispatch = useDispatch();
-
   const handleSubmit = (event) => {
     event.preventDefault();
   };
@@ -30,14 +26,12 @@ function LoginForm() {
         <Button type="submit" color="btn-accent" size="btn-block">
           Login
         </Button>
-        <p
+        <Link
+          to="/register"
           className="font-form text-accent hover:underline font-extralight hover:font-light hover:cursor-pointer"
-          onClick={() => {
-            dispatch(showRegisterForm());
-          }}
         >
           Create Account
-        </p>
+        </Link>
       </form>
     </>
   );

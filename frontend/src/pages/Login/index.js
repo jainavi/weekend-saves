@@ -1,15 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
 
 import Circle from "../../components/Circle";
 import Card from "../../components/Card";
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
 
 import loginPageImage from "../../assets/images/loginPageImage.png";
 
 function LoginPage() {
-  const { showLoginForm } = useSelector((store) => store.auth);
-
   return (
     <>
       <div className="w-full h-screen flex justify-center overflow-hidden">
@@ -23,7 +19,7 @@ function LoginPage() {
               position="self-center mx-auto"
               extra="flex-col"
             >
-              {showLoginForm ? <LoginForm /> : <RegisterForm />}
+              <Outlet />
             </Card>
             <Circle
               size="w-[30%]"
