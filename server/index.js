@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/auth.js");
 const savesRoutes = require("./routes/saves");
+const errorHandler = require("./middleware/errorHandler");
 
 // CONFIGURATIONS
 const app = express();
@@ -30,13 +31,7 @@ app.use("/saves", savesRoutes);
 
 // MIDDLEWARES
 //Error Handler
-app.use((error, req, res, next) => {
-  console.log(error);
-  const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-  res.status(status).json({ message, data });
-});
+app.use(errorHandler);
 
 mongoose
   .connect(MONGO_CONNECT_URL)
