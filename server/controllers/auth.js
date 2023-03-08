@@ -1,6 +1,9 @@
 const { validationResult } = require("express-validator/check");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
+const JWT_KEY = process.env.jwt_key;
 const User = require("../models/user");
 
 exports.signUp = (req, res, next) => {
@@ -27,6 +30,42 @@ exports.signUp = (req, res, next) => {
     })
     .then((result) => {
       res.status(201).json({ message: "User created" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      return next(err);
+    });
+};
+
+exports.login = (req, res, next) => {
+  console.log(JWTKEY);
+  const email = req.body.email;
+  const password = req.body.password;
+  let loadedUser;
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Email does not exist");
+        error.statusCode = 401;
+        throw error;
+      }
+      loadedUser = user;
+      return bcrypt.compare(password, user.password);
+    })
+    .then((isEqual) => {
+      if (!isEqual) {
+        const error = new Error("Wrong password");
+        error.statusCode = 401;
+        throw error;
+      }
+      const token = jwt.sign(
+        { email: loadedUser.email, userId: loadedUser._id.toString() },
+        JWT_KEY,
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({ token, userId: loadedUser._id.toString() });
     })
     .catch((err) => {
       if (!err.statusCode) {
