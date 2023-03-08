@@ -35,10 +35,12 @@ router.put(
       .isLength({ min: 10, max: 10 })
       .trim(),
     body("firstName")
-      .isAlpha()
-      .withMessage("Name must only contain alphabets")
       .isLength({ min: 1 })
       .withMessage("Name can't be empty")
+      .bail()
+      .isAlpha()
+      .withMessage("Name must only contain alphabets")
+
       .trim(),
     body("lastName")
       .if((value, { req }) => {
