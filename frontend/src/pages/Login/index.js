@@ -14,7 +14,7 @@ function LoginPage() {
         <div className="max-w-[90rem] w-full flex">
           <div className="bg-primary h-screen w-2/5 min-w-[20rem] max-w-[24rem] flex relative">
             <Card
-              size="w-[80%] max-w-[23rem] h-96"
+              size="w-[80%] max-w-[23rem] min-h-[24rem]"
               color="bg-secondry"
               position="self-center mx-auto"
               extra="flex-col"
