@@ -1,6 +1,7 @@
 # SERVER GITIGNORE
 server/node_modules
 server/tests
+server/.env
 
 # FRONTEND GITIGNORE
 frontend/node_modules
