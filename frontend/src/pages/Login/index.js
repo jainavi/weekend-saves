@@ -17,7 +17,7 @@ function LoginPage() {
               size="w-[80%] max-w-[23rem] min-h-[24rem]"
               color="bg-secondry"
               position="self-center mx-auto"
-              extra="flex-col"
+              extra="flex-col px-6 lg:px-8"
             >
               <Outlet />
             </Card>
