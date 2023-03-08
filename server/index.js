@@ -29,11 +29,11 @@ app.use("/auth", authRoutes);
 app.use("/saves", savesRoutes);
 
 // MIDDLEWARES
-app.use((error, req, res, next) => { //Error Handler
-  console.log(error);
+//Error Handler
+app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
-  const message = error.messgae;
-  res.status(status).json({ message: message });
+  const message = error.message;
+  res.status(status).json({ message });
 });
 
 mongoose
