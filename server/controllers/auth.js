@@ -9,7 +9,7 @@ exports.signUp = (req, res, next) => {
     const error = new Error("Validation Failed");
     error.statusCode = 422;
     error.data = validationError.array();
-    return next(error);
+    throw error;
   }
   const { email, password, phoneNumber, firstName, lastName } = req.body;
   bcrypt
