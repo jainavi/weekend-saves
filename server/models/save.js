@@ -12,6 +12,11 @@ const saveSchema = new Schema(
     },
     image: String,
     source: String,
+    creator: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );
