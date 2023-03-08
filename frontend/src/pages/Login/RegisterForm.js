@@ -12,13 +12,15 @@ function RegisterForm() {
       <h1 className="text-4xl font-extrabold z-10 mx-auto">Register</h1>
       <form
         onSubmit={handleSubmit}
-        className="flex-1 flex flex-col items-center gap-5 justify-center"
+        className="mt-8 flex-1 flex flex-col items-center gap-5 justify-center"
       >
         <Label htmlFor="email">Email:</Label>
         <Input name="email" placeholder="Email" />
         <Label htmlFor="password">Password:</Label>
         <Input name="password" placeholder="Password" />
-        <Label htmlFor="phone number">Phone Number:</Label>
+        <Label htmlFor="confirmPassword">Confirm Password:</Label>
+        <Input name="confirmPassword" placeholder="Confirm Password" />
+        <Label htmlFor="name">Name:</Label>
         <Input name="phoneNumber" placeholder="Phone Number" />
         <Label htmlFor="name">Name:</Label>
         <Input name="name" placeholder="Name" />
