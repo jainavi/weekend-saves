@@ -11,11 +11,13 @@ const uiSlice = createSlice({
   reducers: {
     pushError: (state, action) => {
       const error = action.payload;
-      state.errorArr.push(error);
+      const updatedArr = [...state.errorArr, error];
+      state.errorArr = updatedArr;
     },
     pushSuccess: (state, action) => {
       const success = action.payload;
-      state.successArr.push(success);
+      const updatedArr = [...state.successArr, success];
+      state.successArr = updatedArr;
     },
   },
 });
