@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  errorArr: [{ msg: "error-1", id: 0 }],
+  errorArr: [],
+  successArr: [],
 };
 
 const uiSlice = createSlice({
@@ -11,6 +12,10 @@ const uiSlice = createSlice({
     pushError: (state, action) => {
       const error = action.payload;
       state.errorArr.push(error);
+    },
+    pushSuccess: (state, action) => {
+      const success = action.payload;
+      state.successArr.push(success);
     },
   },
 });
