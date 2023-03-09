@@ -14,7 +14,7 @@ function LoginForm() {
       <h1 className="text-4xl font-extrabold z-10 mx-auto">Login</h1>
       <form
         onSubmit={handleSubmit}
-        className="flex-1 flex flex-col items-center gap-5 justify-center"
+        className="flex flex-col items-center gap-5 justify-center"
       >
         <Label htmlFor="username">Username:</Label>
         <Input name="username" placeholder="Username" />
