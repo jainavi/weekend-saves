@@ -7,7 +7,7 @@ import store from "./store";
 import "./index.css";
 import App from "./App";
 import LoginPage from "./pages/login/index";
-import Navbar from "./components/navbar/Navbar";
+import Layout from "./components/Layout";
 import HomePage from "./pages/home/index";
 import LoginForm from "./pages/login/LoginForm";
 import RegisterForm from "./pages/login/RegisterForm";
@@ -15,7 +15,7 @@ import RegisterForm from "./pages/login/RegisterForm";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navbar />,
+    element: <Layout />,
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/home", element: <HomePage /> },
