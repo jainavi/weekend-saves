@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function TimeOutBar({ color }) {
+function TimeOutBar({ onComplete, color }) {
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
@@ -8,8 +8,10 @@ function TimeOutBar({ color }) {
       setTimeout(() => {
         setTimeLeft(timeLeft + 0.5);
       }, 50);
+    } else {
+      onComplete();
     }
-  }, [timeLeft]);
+  }, [timeLeft, onComplete]);
 
   return (
     <progress
