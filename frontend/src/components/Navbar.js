@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -83,7 +83,6 @@ function Navbar() {
           </div>
         </div>
       </div>
-      <Outlet />
     </>
   );
 }
