@@ -2,9 +2,10 @@ import { useSelector } from "react-redux";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import Error from "./Error";
+import Success from "./Success";
 
-function ErrorList() {
-  const { errorArr } = useSelector((store) => store.ui);
+function StatusList() {
+  const { errorArr, successArr } = useSelector((store) => store.ui);
   const [parent, enableAnimations] = useAutoAnimate();
 
   return (
@@ -17,8 +18,13 @@ function ErrorList() {
           {error.msg}
         </Error>
       ))}
+      {successArr.map((success, index) => (
+        <Success key={success.id} id={success.id}>
+          {success.msg}
+        </Success>
+      ))}
     </div>
   );
 }
 
-export default ErrorList;
+export default StatusList;

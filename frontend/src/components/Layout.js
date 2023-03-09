@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
 
 import Navbar from "./Navbar";
-import ErrorList from "./ErrorList";
+import StatusList from "./StatusList";
 
 function Layout() {
   return (
     <>
       <Navbar />
-      <ErrorList />
+      <StatusList />
       <main>
         <Outlet />
       </main>
