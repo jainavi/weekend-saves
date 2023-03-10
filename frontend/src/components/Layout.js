@@ -32,7 +32,7 @@ function Layout() {
       dispatch(setLogout());
       dispatch(pushSuccess("Session time out, Please log in again"));
       navigate("/login");
-    }, remainingMilliseconds + 1000);
+    }, remainingMilliseconds);
   };
 
   return (
