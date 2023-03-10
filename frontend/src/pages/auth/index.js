@@ -3,9 +3,9 @@ import { Outlet } from "react-router-dom";
 import Circle from "../../components/Circle";
 import Card from "../../components/Card";
 
-import loginPageImage from "../../assets/images/loginPageImage.png";
+import AuthPageImage from "../../assets/images/loginPageImage.png";
 
-function LoginPage() {
+function AuthPage() {
   return (
     <>
       <div className="w-full h-screen flex justify-center overflow-hidden">
@@ -44,7 +44,7 @@ function LoginPage() {
           </div>
           <div className="grow flex justify-center">
             <div className="self-center relative max-w-4xl ">
-              <img src={loginPageImage} alt="People Readin" />
+              <img src={AuthPageImage} alt="People Readin" />
               <Circle
                 size="w-[60%]"
                 color="bg-accent"
@@ -75,4 +75,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default AuthPage;
