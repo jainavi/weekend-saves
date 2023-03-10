@@ -40,7 +40,6 @@ exports.signUp = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  console.log(JWTKEY);
   const email = req.body.email;
   const password = req.body.password;
   let loadedUser;
