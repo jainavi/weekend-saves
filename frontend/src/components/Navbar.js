@@ -1,12 +1,20 @@
-import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { setLogout } from "../slices/authSlice";
 
 function Navbar() {
-  const searchRef = useRef();
+  const { isAuth } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const clickHandler = (event) => {
+    dispatch(setLogout());
+    const routePath = event.currentTarget.getAttribute("href");
+    window.location.href = routePath;
+  };
 
   return (
     <>
@@ -29,7 +37,6 @@ function Navbar() {
               >
                 <AiOutlineSearch className="text-grayL flex-none transition-transform ease-in-out scale-150 hover:scale-[175%] hover:text-gray-500 hover:cursor-pointer" />
                 <input
-                  ref={searchRef}
                   type="text"
                   placeholder="Search"
                   className="lg:block outline-none text-black w-full"
@@ -75,7 +82,11 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <a>Logout</a>
+                    {isAuth && (
+                      <Link to="/login" onClick={clickHandler}>
+                        Logout
+                      </Link>
+                    )}
                   </li>
                 </ul>
               </div>
