@@ -12,8 +12,7 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     pushError: (state, action) => {
-      const error = action.payload;
-      error.id = id;
+      const error = { msg: action.payload, id };
       id += 1;
       const updatedArr = [...state.errorArr, error];
       state.errorArr = updatedArr;
@@ -24,8 +23,7 @@ const uiSlice = createSlice({
       state.errorArr = updatedArr;
     },
     pushSuccess: (state, action) => {
-      const success = action.payload;
-      success.id = id;
+      const success = { msg: action.payload, id: id };
       id += 1;
       const updatedArr = [...state.successArr, success];
       state.successArr = updatedArr;
