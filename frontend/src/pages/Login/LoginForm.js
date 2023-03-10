@@ -17,9 +17,9 @@ function LoginForm() {
         className="flex flex-col items-center gap-5 justify-center"
       >
         <Label htmlFor="username">Username:</Label>
-        <Input name="username" placeholder="Username" />
+        <Input type="text" name="username" placeholder="Username" />
         <Label htmlFor="password">Password:</Label>
-        <Input name="password" placeholder="Password" />
+        <Input type="password" name="password" placeholder="Password" />
         <a className="self-end font-form font-light hover:font-normal text-gray hover:underline hover:text-grayL">
           Forgot Password?
         </a>
