@@ -20,7 +20,38 @@ export async function registerHandler(data) {
     error.data = [];
     throw error;
   } catch (err) {
-    const error = new Error("Signup Failed");
+    const error = new Error(err.response.data.message);
+    error.data = [];
+    if (err.response) {
+      error.data = err.response.data.data.map((body) => body.msg);
+    }
+    throw error;
+  }
+}
+
+export async function loginHandler(data) {
+  let response = {};
+  try {
+    const res = await axios.post("http://localhost:8080/auth/login", {
+      email: data.email,
+      password: data.password,
+    });
+    if (res.status === 200) {
+      response.statuCode = 200;
+      response.data = res.data;
+      response.msg = "Logged in successfully";
+      const remainingMilliseconds = 60 * 60 * 1000;
+      const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId", res.data.userId);
+      localStorage.setItem("expiryDate", expiryDate.toISOString());
+      return response;
+    }
+    const error = new Error("Oops! Something went wrong");
+    error.data = [];
+    throw error;
+  } catch (err) {
+    const error = new Error(err.response.data.message);
     error.data = [];
     if (err.response) {
       error.data = err.response.data.data.map((body) => body.msg);
