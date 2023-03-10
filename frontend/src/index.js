@@ -8,11 +8,13 @@ import "./index.css";
 // import App from "./App";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
-import LoginPage from "./pages/login/index";
+import AuthPage from "./pages/auth/index";
 import Layout from "./components/Layout";
+import LoginForm from "./pages/auth/LoginForm";
+import RegisterForm from "./pages/auth/RegisterForm";
 import HomePage from "./pages/home/index";
-import LoginForm from "./pages/login/LoginForm";
-import RegisterForm from "./pages/login/RegisterForm";
+import AboutUsPage from "./pages/aboutUs/index";
+import ProfilePage from "./pages/profile/index";
 
 const router = createBrowserRouter([
   {
@@ -21,14 +23,16 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <ProtectedRoute Page={HomePage} /> },
       { path: "/home", element: <ProtectedRoute Page={HomePage} /> },
+      { path: "/about-us", element: <ProtectedRoute Page={AboutUsPage} /> },
+      { path: "/profile", element: <ProtectedRoute Page={ProfilePage} /> },
       {
         path: "/login",
-        element: <AuthRoute Page={LoginPage} />,
+        element: <AuthRoute Page={AuthPage} />,
         children: [{ path: "/login", element: <LoginForm /> }],
       },
       {
         path: "/register",
-        element: <AuthRoute Page={LoginPage} />,
+        element: <AuthRoute Page={AuthPage} />,
         children: [{ path: "/register", element: <RegisterForm /> }],
       },
     ],
