@@ -5,7 +5,9 @@ import { Provider } from "react-redux";
 
 import store from "./store";
 import "./index.css";
-import App from "./App";
+// import App from "./App";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AuthRoute from "./components/AuthRoute";
 import LoginPage from "./pages/login/index";
 import Layout from "./components/Layout";
 import HomePage from "./pages/home/index";
@@ -17,16 +19,16 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-      { path: "/", element: <HomePage /> },
-      { path: "/home", element: <HomePage /> },
+      { path: "/", element: <ProtectedRoute Page={HomePage} /> },
+      { path: "/home", element: <ProtectedRoute Page={HomePage} /> },
       {
         path: "/login",
-        element: <LoginPage />,
+        element: <AuthRoute Page={LoginPage} />,
         children: [{ path: "/login", element: <LoginForm /> }],
       },
       {
         path: "/register",
-        element: <LoginPage />,
+        element: <AuthRoute Page={LoginPage} />,
         children: [{ path: "/register", element: <RegisterForm /> }],
       },
     ],
