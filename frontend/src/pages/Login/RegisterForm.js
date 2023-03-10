@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Label from "../../components/Label";
 import Input from "../../components/Input";
@@ -9,6 +10,7 @@ import { registerFormValidator } from "../../util/validator";
 import { registerHandler } from "../../util/api";
 
 function RegisterForm() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const initialState = {
     email: "",
@@ -34,6 +36,7 @@ function RegisterForm() {
     try {
       const res = await registerHandler(formData);
       dispatch(pushSuccess(res.msg));
+      navigate("/login");
     } catch (err) {
       dispatch(pushError(err.message));
       err.data.forEach((msg) => dispatch(pushError(err.data)));
