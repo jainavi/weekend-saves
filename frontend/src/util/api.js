@@ -20,9 +20,10 @@ export async function registerHandler(data) {
     error.data = [];
     throw error;
   } catch (err) {
-    const error = new Error(err.response.data.message);
+    const error = new Error("Signup Failed");
     error.data = [];
     if (err.response) {
+      error.message = err.response.data.message;
       error.data = err.response.data.data.map((body) => body.msg);
     }
     throw error;
@@ -51,9 +52,10 @@ export async function loginHandler(data) {
     error.data = [];
     throw error;
   } catch (err) {
-    const error = new Error(err.response.data.message);
+    const error = new Error("Login Failed");
     error.data = [];
     if (err.response) {
+      error.message = err.response.data.message;
       error.data = err.response.data.data.map((body) => body.msg);
     }
     throw error;
