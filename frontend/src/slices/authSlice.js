@@ -1,21 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  showLoginForm: true,
+  isAuth: false,
+  token: null,
+  userId: null,
+  authLoading: false,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    showRegisterForm: (state) => {
-      state.showLoginForm = false;
+    setLogin: (state, action) => {
+      const { token, userId } = action.payload;
+      return { ...state, isAuth: true, token, userId };
     },
-    showLoginForm: (state) => {
-      state.showLoginForm = true;
+    setLogout: (state) => {
+      state.isAuth = false;
+      state.token = null;
+      state.userId = null;
+      localStorage.removeItem("token");
+      localStorage.removeItem("expiryDate");
+      localStorage.removeItem("userId");
+    },
+    setLoading: (state, action) => {
+      state.authLoading = action.payload;
     },
   },
 });
 
-export const { showRegisterForm, showLoginForm } = authSlice.actions;
+export const { setLogout, setLogin } = authSlice.actions;
 export default authSlice.reducer;
