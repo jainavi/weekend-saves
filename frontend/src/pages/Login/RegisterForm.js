@@ -29,7 +29,7 @@ function RegisterForm() {
     if (!response.ok) {
       setIsValid(response.target);
       response.errorMsg.forEach((msg) => {
-        dispatch(pushError({ msg }));
+        dispatch(pushError(msg));
       });
       return;
     }
@@ -39,7 +39,7 @@ function RegisterForm() {
       navigate("/login");
     } catch (err) {
       dispatch(pushError(err.message));
-      err.data.forEach((msg) => dispatch(pushError(err.data)));
+      err.data.forEach((msg) => dispatch(pushError(msg)));
     }
   };
 
