@@ -36,7 +36,7 @@ export function registerFormValidator(data) {
     response.target.firstName = true;
     response.errorMsg.push("Please provide a valid name");
   }
-  if (!nameRegex.test(lastName)) {
+  if (lastName !== "" && !nameRegex.test(lastName)) {
     response.ok = false;
     response.target.lastName = true;
     response.errorMsg.push("Please provide a valid name");
