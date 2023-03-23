@@ -1,9 +1,11 @@
 import axios from "axios";
 
+const serverUrl = "http://localhost:8080";
+
 export async function registerHandler(data) {
   let response = {};
   try {
-    const res = await axios.put("http://localhost:8080/auth/signup", {
+    const res = await axios.put(`${serverUrl}/auth/signup`, {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
@@ -33,7 +35,7 @@ export async function registerHandler(data) {
 export async function loginHandler(data) {
   let response = {};
   try {
-    const res = await axios.post("http://localhost:8080/auth/login", {
+    const res = await axios.post(`${serverUrl}/auth/login`, {
       email: data.email,
       password: data.password,
     });
