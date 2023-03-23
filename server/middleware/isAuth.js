@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
     token = req.get("Authorization").split(" ")[1];
   } catch (err) {
     err.statusCode = 401;
+    err.toDisplay = "Authorization Failed!";
     throw err;
   }
   let decodedToken;
@@ -16,6 +17,7 @@ module.exports = (req, res, next) => {
     decodedToken = jwt.verify(token, JWT_KEY);
   } catch (err) {
     err.statusCode = 500;
+    err.toDisplay = "Internal error has occured";
     throw err;
   }
   if (!decodedToken) {

@@ -14,6 +14,7 @@ exports.signUp = (req, res, next) => {
     error.data = validationError.array();
     throw error;
   }
+
   const { email, password, phoneNumber, firstName, lastName } = req.body;
   bcrypt
     .hash(password, 12)
@@ -32,6 +33,7 @@ exports.signUp = (req, res, next) => {
       res.status(201).json({ message: "User created" });
     })
     .catch((err) => {
+      err.toDisplay = "Oops! an internal error occured";
       if (!err.statusCode) {
         err.statusCode = 500;
       }
@@ -67,6 +69,7 @@ exports.login = (req, res, next) => {
       res.status(200).json({ token, userId: loadedUser._id.toString() });
     })
     .catch((err) => {
+      err.toDisplay = "Oops! a database error occurred";
       if (!err.statusCode) {
         err.statusCode = 500;
       }

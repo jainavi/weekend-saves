@@ -1,7 +1,7 @@
 # SERVER GITIGNORE
 server/node_modules
-server/tests
 server/.env
+server/playGround
 
 # FRONTEND GITIGNORE
 frontend/node_modules
