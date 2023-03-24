@@ -1,5 +1,5 @@
-const { extract } = require("@extractus/article-extractor");
 const Save = require("../models/save");
+const { fromUrlExtract } = require("../util/articleExtractor");
 
 exports.getAllPosts = (req, res, next) => {
   res.status(200).json({
@@ -15,47 +15,36 @@ exports.postSave = (req, res, next) => {
   const method = req.body.method;
   if (method === "URL") {
     const url = req.body.url;
-
     if (!url) {
       const error = new Error("url not provided");
       error.statusCode = 422;
-      return next(error);
+      throw error;
     }
 
-    extract(url)
+    fromUrlExtract(url, req.userId)
       .then((article) => {
-        const { title, image, content, source } = article;
-        const newSave = new Save({
-          url,
-          title,
-          content,
-          image,
-          source,
-        });
+        let newSave = new Save({ ...article });
         newSave
           .save()
           .then((result) => {
-            res.status(201).json({
-              message: "Post create successfully!",
-              save: result,
-            });
+            res
+              .status(201)
+              .json({ message: "Post created successfully!", result });
           })
           .catch((err) => {
-            const error = new Error("can't fetch your post");
-            error.statuCode = 500;
-            next(error);
+            err.toDisplay = "Oops! an internal error occured";
+            err.statusCode = 500;
+            next(err);
           });
       })
       .catch((err) => {
-        const error = new Error("can't fetch your post");
-        error.statuCode = 500;
-        next(error);
+        err.toDisplay = "Can't fetch your post";
+        err.statusCode = 500;
+        next(err);
       });
-  } else if (method == "POST") {
-    // filler
   } else {
     const error = new Error("valid method not provided");
     error.statusCode = 400;
-    next(error);
+    throw error;
   }
 };
