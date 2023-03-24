@@ -2,6 +2,7 @@
 server/node_modules
 server/.env
 server/playGround
+server/.cache
 
 # FRONTEND GITIGNORE
 frontend/node_modules
