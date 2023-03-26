@@ -8,6 +8,7 @@ import Label from "../../components/Label";
 import { loginHandler } from "../../util/api";
 import { pushSuccess, pushError } from "../../slices/uiSlice";
 import { setLogin, setLogout } from "../../slices/authSlice";
+import { setUserDetails } from "../../slices/userSlice";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function LoginForm() {
       dispatch(setLogin(res.data));
       setAutoLogout(remainingMilliseconds);
       dispatch(pushSuccess(res.msg));
+      dispatch(setUserDetails(res.data.result));
       navigate("/home");
     } catch (err) {
       dispatch(pushError(err.message));

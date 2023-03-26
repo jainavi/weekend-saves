@@ -46,18 +46,23 @@ exports.login = (req, res, next) => {
   const password = req.body.password;
   let loadedUser;
   User.findOne({ email })
+    .populate({ path: "saves", model: "Save" })
     .then((user) => {
+      const { _id, email, firstName, lastName, phoneNumber, saves } = user;
+
       if (!user) {
         const error = new Error("Email does not exist");
+        error.toDisplay = "Email does not exist";
         error.statusCode = 401;
         throw error;
       }
-      loadedUser = user;
+      loadedUser = { _id, email, firstName, lastName, phoneNumber, saves };
       return bcrypt.compare(password, user.password);
     })
     .then((isEqual) => {
       if (!isEqual) {
         const error = new Error("Wrong password");
+        error.toDisplay = "Wrong password";
         error.statusCode = 401;
         throw error;
       }
@@ -66,10 +71,10 @@ exports.login = (req, res, next) => {
         JWT_KEY,
         { expiresIn: "1h" }
       );
-      res.status(200).json({ token, userId: loadedUser._id.toString() });
+      res.status(200).json({ token, result: loadedUser });
     })
     .catch((err) => {
-      err.toDisplay = "Oops! a database error occurred";
+      err.toDisplay = err.toDisplay || "Oops! an internal error occurred";
       if (!err.statusCode) {
         err.statusCode = 500;
       }
