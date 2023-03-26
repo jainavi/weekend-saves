@@ -5,7 +5,7 @@ const serverUrl = "http://localhost:8080";
 export async function registerHandler(data) {
   let response = {};
   try {
-    const res = await axios.put(`${serverUrl}/auth/signup`, {
+    const res = await axios.post(`${serverUrl}/auth/signup`, {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
@@ -18,9 +18,6 @@ export async function registerHandler(data) {
       response.msg = "Signed up successfully";
       return response;
     }
-    const error = new Error("OOps! Something went wrong");
-    error.data = [];
-    throw error;
   } catch (err) {
     const error = new Error("Signup Failed");
     error.data = [];
@@ -40,7 +37,6 @@ export async function loginHandler(data) {
       password: data.password,
     });
     if (res.status === 200) {
-      response.statuCode = 200;
       response.data = res.data;
       response.msg = "Logged in successfully";
       const remainingMilliseconds = 60 * 60 * 1000;
