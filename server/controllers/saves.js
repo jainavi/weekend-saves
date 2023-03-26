@@ -1,14 +1,29 @@
 const Save = require("../models/save");
+const User = require("../models/user");
 const { fromUrlExtract } = require("../util/articleExtractor");
 
 exports.getAllPosts = (req, res, next) => {
-  res.status(200).json({
-    message: "You have successfully reached the route",
-  });
+  const userId = req.userId;
+
+  User.findById(userId)
+    .populate({ path: "saves", model: "Save" })
+    .then((result) => {
+      res
+        .status(200)
+        .json({
+          message: "All saves fetched successfully",
+          result: result.saves,
+        });
+    })
+    .catch((err) => {
+      err.toDisplay = "Oops! an internal error occured";
+      err.statusCode = 500;
+      next(err);
+    });
 };
 
 exports.deleteSave = (req, res) => {
-  res.json({ message: "You have reached deleteSaves route" });
+  const saveId = req.body.saveId;
 };
 
 exports.postSave = (req, res, next) => {
@@ -17,19 +32,25 @@ exports.postSave = (req, res, next) => {
     const url = req.body.url;
     if (!url) {
       const error = new Error("url not provided");
-      error.statusCode = 422;
+      error.statusCode = 400;
       throw error;
     }
 
     fromUrlExtract(url, req.userId)
       .then((article) => {
         let newSave = new Save({ ...article });
+
         newSave
           .save()
           .then((result) => {
-            res
-              .status(201)
-              .json({ message: "Post created successfully!", result });
+            User.findById(req.userId).then((user) => {
+              user.saves.push(result._id);
+              user.save().then((result) => {
+                res
+                  .status(201)
+                  .json({ message: "Post created successfully!", result });
+              });
+            });
           })
           .catch((err) => {
             err.toDisplay = "Oops! an internal error occured";
