@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const path = require("path");
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -20,6 +23,16 @@ module.exports = {
       },
       screens: {
         maxSize: "1440px",
+      },
+      backgroundImage: {
+        "login-page-reading-desktop":
+          "url('" +
+          path.resolve(__dirname, "src/assets/images/loginPageImage.jpg") +
+          "')",
+        "backgroud-dot-pattern":
+          "url('" +
+          path.resolve(__dirname, "src/assets/images/dot-grid.jpg") +
+          "')",
       },
     },
   },
