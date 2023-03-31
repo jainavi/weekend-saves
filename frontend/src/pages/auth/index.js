@@ -1,5 +1,4 @@
-import { Outlet } from "react-router-dom";
-
+import AuthForm from "../../components/AuthForm";
 import Circle from "../../components/Circle";
 import Card from "../../components/Card";
 
@@ -19,7 +18,7 @@ function AuthPage() {
               position="self-center mx-auto"
               extra="flex-col px-5 lg:px-8 justify-between"
             >
-              <Outlet />
+              <AuthForm />
             </Card>
             <Circle
               size="w-[30%]"

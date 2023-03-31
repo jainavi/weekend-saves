@@ -21,20 +21,12 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
+      { path: "/login", element: <AuthPage Page={AuthPage} /> },
+      { path: "/register", element: <AuthPage Page={AuthPage} /> },
       { path: "/", element: <ProtectedRoute Page={HomePage} /> },
       { path: "/home", element: <ProtectedRoute Page={HomePage} /> },
       { path: "/about-us", element: <ProtectedRoute Page={AboutUsPage} /> },
       { path: "/profile", element: <ProtectedRoute Page={ProfilePage} /> },
-      {
-        path: "/login",
-        element: <AuthRoute Page={AuthPage} />,
-        children: [{ path: "/login", element: <LoginForm /> }],
-      },
-      {
-        path: "/register",
-        element: <AuthRoute Page={AuthPage} />,
-        children: [{ path: "/register", element: <RegisterForm /> }],
-      },
     ],
   },
 ]);

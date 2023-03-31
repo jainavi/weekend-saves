@@ -66,9 +66,9 @@ function LoginForm() {
           placeholder="Password"
           onChange={handleChange}
         />
-        <a className="self-end font-form font-light hover:font-normal text-gray hover:underline hover:text-grayL">
+        <Link className="self-end font-form font-light hover:font-normal text-gray hover:underline hover:text-grayL">
           Forgot Password?
-        </a>
+        </Link>
         <Button type="submit" color="btn-accent" size="btn-block">
           Login
         </Button>
