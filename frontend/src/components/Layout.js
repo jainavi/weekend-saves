@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import Navbar from "./Navbar";
 import StatusList from "./StatusList";
-import { setLogin, setLogout, setLoading } from "../slices/authSlice";
+import { setLogin, setLogout } from "../slices/authSlice";
 import { pushSuccess } from "../slices/uiSlice";
 
 function Layout() {
@@ -14,7 +14,6 @@ function Layout() {
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
     if (!token || !expiryDate) {
-      dispatch(setLoading(false));
       return;
     }
     if (new Date(expiryDate) <= new Date()) {

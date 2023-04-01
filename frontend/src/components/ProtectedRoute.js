@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 function ProtectedRoute({ Page }) {
   const navigate = useNavigate();
-  const { isAuth, isLoading } = useSelector((state) => state.auth);
+  const { isAuth } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isLoading && !isAuth) {
+    if (!isAuth) {
       navigate("/login");
     }
-  }, [isLoading, isAuth, navigate]);
+  }, [isAuth, navigate]);
 
-  return <>{!isLoading && <Page />}</>;
+  return <>{isAuth && <Page />}</>;
 }
 
 export default ProtectedRoute;

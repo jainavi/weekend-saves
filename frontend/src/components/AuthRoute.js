@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 function AuthRoute({ Page }) {
   const navigate = useNavigate();
-  const { isAuth, isLoading } = useSelector((state) => state.auth);
+  const { isAuth } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isLoading && isAuth) {
+    if (isAuth) {
       navigate("/home");
     }
-  }, [isLoading, isAuth, navigate]);
+  }, [isAuth, navigate]);
 
-  return <>{!isLoading && <Page />}</>;
+  return <>{isAuth || <Page />}</>;
 }
 
 export default AuthRoute;
