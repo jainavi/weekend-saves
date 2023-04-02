@@ -59,3 +59,27 @@ export async function loginHandler(data) {
     throw error;
   }
 }
+
+export async function getSaves(token, type = "all", page = 1) {
+  let response;
+  try {
+    const res = await axios.get(
+      `${serverUrl}/saves?type=${type}&page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    response = res.data.result;
+    return response;
+  } catch (err) {
+    const error = new Error("Failed to fetch saves");
+    error.data = [];
+    if (err.response) {
+      error.message = err.response.data.message;
+      error.data = err.response.data.data.map((body) => body.msg);
+    }
+    throw error;
+  }
+}
