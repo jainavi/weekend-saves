@@ -7,7 +7,6 @@ const initialState = {
   phoneNumber: null,
   email: null,
   isLoading: true,
-  saves: [],
 };
 
 const userSlice = createSlice({
@@ -15,14 +14,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUserDetails: (state, action) => {
-      const { _id, firstName, lastName, phoneNumber, email, saves } =
-        action.payload;
+      const { _id, firstName, lastName, phoneNumber, email } = action.payload;
       state.userId = _id;
       state.firstName = firstName;
       state.lastName = lastName;
       state.phoneNumber = phoneNumber;
       state.email = email;
-      state.saves = saves;
     },
   },
 });

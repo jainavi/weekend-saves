@@ -46,17 +46,16 @@ exports.login = (req, res, next) => {
   const password = req.body.password;
   let loadedUser;
   User.findOne({ email })
-    .populate({ path: "saves", model: "Save" })
     .then((user) => {
-      const { _id, email, firstName, lastName, phoneNumber, saves } = user;
-
       if (!user) {
         const error = new Error("Email does not exist");
         error.toDisplay = "Email does not exist";
         error.statusCode = 401;
         throw error;
       }
-      loadedUser = { _id, email, firstName, lastName, phoneNumber, saves };
+
+      const { _id, email, phoneNumber, firstName, lastName, saves } = user;
+      loadedUser = { _id, email, phoneNumber, firstName, lastName };
       return bcrypt.compare(password, user.password);
     })
     .then((isEqual) => {
