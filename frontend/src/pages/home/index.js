@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { BiHomeAlt } from "react-icons/bi";
@@ -10,6 +10,7 @@ import { getSaves } from "../../util/api";
 import { pushError } from "../../slices/uiSlice";
 import Select from "../../components/Select";
 import LoadingCard from "../../components/LoadingCard";
+import InputFeild from "../../components/Input";
 
 function HomePage() {
   const { token } = useSelector((state) => state.auth);
@@ -18,8 +19,23 @@ function HomePage() {
   const [maxPageNumber, setMaxPageNumber] = useState(1);
   const [saves, setSaves] = useState([]);
   const [type, setType] = useState("all");
+  const addRef = useRef(null);
+  const [addClicked, setAddClicked] = useState(false);
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleClickOutside = (event) => {
+    if (addRef.current && !addRef.current.contains(event.target)) {
+      setAddClicked(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,6 +57,11 @@ function HomePage() {
     setSearchParams({ type, page: pageNumber });
     setPageNumber(1);
     setType(type);
+  };
+
+  const addClickedHandler = async (event) => {
+    setAddClicked(false);
+    addClicked && event.stopPropagation();
   };
 
   return (
@@ -83,12 +104,46 @@ function HomePage() {
               </div>,
             ]}
           />
-          <div className="group w-12 h-10 p-2 rounded-full bg-primary flex justify-center items-center transition-all ease-in-out hover:w-16 hover:cursor-pointer">
-            <IoAdd className="text-neutral scale-150  group-hover:hidden" />
-            <div className="hidden group-hover:block text-neutral">Add</div>
+          <div
+            ref={addRef}
+            onClick={() => {
+              setAddClicked(true);
+            }}
+            className={`group  h-10 p-2 rounded-full bg-primary flex justify-center items-center transition-all ease-in-out ${
+              addClicked
+                ? "w-96 justify-around"
+                : "w-12 hover:w-16 hover:cursor-pointer"
+            }`}
+          >
+            <IoAdd
+              className={`${
+                addClicked ? "hidden" : ""
+              } text-neutral scale-150  group-hover:hidden`}
+            />
+            <InputFeild
+              type="text"
+              id="url"
+              name="url"
+              placeholder="Drop your url"
+              extra={`${
+                addClicked
+                  ? "block h-8 w-72 pb-0 text-neutral border-none placeholder:text-neutral focus:outline-0 focus:ouline-offset-0"
+                  : "hidden"
+              }`}
+            />
+            <div
+              onClick={addClickedHandler}
+              className={`${
+                addClicked
+                  ? "hover:cursor-pointer hover:bg-secondry/25 rounded-full py-1 px-2"
+                  : "hidden group-hover:block"
+              } text-neutral`}
+            >
+              Add
+            </div>
           </div>
         </div>
-        <div className="mt-4 w-full rounded-full border-t-2 border-grayL opacity-50"></div>
+        <div className="mt-4 w-full rounded-full border-t-2 border-grayL opacity-50" />
 
         <div className="mt-8 grid grid-cols-3">
           {!isLoading
@@ -121,7 +176,9 @@ function HomePage() {
                   </div>
                 );
               })
-            : Array.from({ length: 6 }, (_, index) => <LoadingCard />)}
+            : Array.from({ length: 6 }, (_, index) => (
+                <LoadingCard key={index} />
+              ))}
         </div>
         <div className="btn-group mt-8 w-full justify-center">
           <button
