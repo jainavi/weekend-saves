@@ -45,6 +45,9 @@ function LoginForm() {
     }, remainingMilliseconds);
   };
 
+  const inputFeildStyling =
+    "w-full pb-2 bg-secondary border-b-gray focus:border-none focus:outline focus:outline-offset-8 focus:outline-2 focus:pb-0";
+
   return (
     <>
       <h1 className="text-4xl font-extrabold z-10 mx-auto">Login</h1>
@@ -58,6 +61,7 @@ function LoginForm() {
           name="email"
           placeholder="Email"
           onChange={handleChange}
+          extra={inputFeildStyling}
         />
         <Label htmlFor="password">Password:</Label>
         <Input
@@ -65,6 +69,7 @@ function LoginForm() {
           name="password"
           placeholder="Password"
           onChange={handleChange}
+          extra={inputFeildStyling}
         />
         <Link className="self-end font-form font-light hover:font-normal text-gray hover:underline hover:text-grayL">
           Forgot Password?

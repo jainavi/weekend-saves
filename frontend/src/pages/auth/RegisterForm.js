@@ -49,6 +49,9 @@ function RegisterForm() {
     setIsValid({ ...isValid, [name]: false });
   };
 
+  const inputFeildStyling =
+    "w-full pb-2 bg-secondary border-b-gray focus:border-none focus:outline focus:outline-offset-8 focus:outline-2 focus:pb-0";
+
   return (
     <>
       <h1 className="text-4xl font-extrabold z-10 mx-auto">Register</h1>
@@ -61,7 +64,7 @@ function RegisterForm() {
           type="text"
           name="email"
           placeholder="Email"
-          extra="col-span-2"
+          extra={`col-span-2 ${inputFeildStyling}`}
           onChange={handleChange}
           invalid={isValid.email}
         />
@@ -70,7 +73,7 @@ function RegisterForm() {
           type="password"
           name="password"
           placeholder="Password"
-          extra="col-span-2"
+          extra={`col-span-2 ${inputFeildStyling}`}
           onChange={handleChange}
           invalid={isValid.password}
         />
@@ -79,7 +82,7 @@ function RegisterForm() {
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
-          extra="col-span-2"
+          extra={`col-span-2 ${inputFeildStyling}`}
           onChange={handleChange}
           invalid={isValid.confirmPassword}
         />
@@ -88,7 +91,7 @@ function RegisterForm() {
           type="text"
           name="phoneNumber"
           placeholder="Phone Number"
-          extra="col-span-2"
+          extra={`col-span-2 ${inputFeildStyling}`}
           onChange={handleChange}
           invalid={isValid.phoneNumber}
         />
@@ -99,6 +102,7 @@ function RegisterForm() {
           placeholder="First Name"
           onChange={handleChange}
           invalid={isValid.firstName}
+          extra={inputFeildStyling}
         />
         <Label htmlFor="firstName">Last Name:</Label>
         <Input
@@ -107,6 +111,7 @@ function RegisterForm() {
           placeholder="Last Name"
           onChange={handleChange}
           invalid={isValid.lastName}
+          extra={inputFeildStyling}
         />
         <Button
           type="submit"
