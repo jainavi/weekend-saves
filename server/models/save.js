@@ -16,7 +16,7 @@ const saveSchema = new Schema(
     creator: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      // required: true, //Make it required
+      required: true,
     },
     userOptions: {
       isArchived: {

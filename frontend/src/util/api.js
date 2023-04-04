@@ -83,3 +83,31 @@ export async function getSaves(token, type = "all", page = 1) {
     throw error;
   }
 }
+
+export async function postSave(token, url) {
+  let response;
+  try {
+    const res = await axios.post(
+      `${serverUrl}/saves/post`,
+      {
+        method: "URL",
+        url,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    response = res.data.result;
+    return response;
+  } catch (err) {
+    const error = new Error("Failed to fetch saves");
+    error.data = [];
+    if (err.response) {
+      error.message = err.response.data.message;
+      error.data = err.response.data.data.map((body) => body.msg);
+    }
+    throw error;
+  }
+}

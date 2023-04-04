@@ -18,6 +18,7 @@ exports.getAllPosts = (req, res, next) => {
       select: "-content -modifiedContent",
       match: matchFilter,
       options: {
+        sort: { createdAt: -1 },
         limit: limitPerPage,
         skip: (page - 1) * limitPerPage,
       },
@@ -91,7 +92,8 @@ exports.postSave = (req, res, next) => {
     fromUrlExtract(url, req.userId)
       .then((article) => {
         let newSave = new Save({ ...article });
-        save = newSave;
+        const { content, modifiedContent, ...rest } = newSave._doc;
+        save = rest;
         newSave
           .save()
           .then((result) => {

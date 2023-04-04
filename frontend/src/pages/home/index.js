@@ -6,7 +6,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BsArchive } from "react-icons/bs";
 import { IoAdd } from "react-icons/io5";
 
-import { getSaves } from "../../util/api";
+import { getSaves, postSave } from "../../util/api";
 import { pushError } from "../../slices/uiSlice";
 import Select from "../../components/Select";
 import LoadingCard from "../../components/LoadingCard";
@@ -24,34 +24,36 @@ function HomePage() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleClickOutside = (event) => {
-    if (addRef.current && !addRef.current.contains(event.target)) {
-      setAddClicked(false);
+  const savesFetch = async () => {
+    try {
+      const res = await getSaves(token, type, pageNumber);
+      setSaves(res.saves);
+      setMaxPageNumber(Math.ceil(res.docCount / 6));
+      setSearchParams({ type, page: pageNumber });
+      setIsLoading(false);
+    } catch (err) {
+      dispatch(pushError(err.message));
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
     setIsLoading(true);
-    (async () => {
-      try {
-        const res = await getSaves(token, type, pageNumber);
-        setSaves(res.saves);
-        setMaxPageNumber(Math.floor(res.docCount / 6) + 1);
-        setSearchParams({ type, page: pageNumber });
-        setIsLoading(false);
-      } catch (err) {
-        dispatch(pushError(err.message));
-        setIsLoading(false);
-      }
-    })();
+    savesFetch();
   }, [pageNumber, type, token, dispatch, setSearchParams]);
+
+  const urlSubmitHandler = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const url = formData.get("url");
+    setAddClicked(false);
+    try {
+      await postSave(token, url);
+      savesFetch();
+    } catch (err) {
+      dispatch(pushError(err.message));
+    }
+  };
 
   const typeChangeHandler = async (type) => {
     setSearchParams({ type, page: pageNumber });
@@ -59,14 +61,14 @@ function HomePage() {
     setType(type);
   };
 
-  const addClickedHandler = async (event) => {
-    setAddClicked(false);
-    addClicked && event.stopPropagation();
-  };
-
   return (
     <>
-      <div className="p-12 w-full max-w-screen-maxSize mx-auto min-h-screen">
+      <div
+        onClick={() => {
+          setAddClicked(false);
+        }}
+        className="p-12 w-full max-w-screen-maxSize mx-auto min-h-screen"
+      >
         <div className="w-full flex justify-between items-end">
           <Select
             labelStyles="mt-10 p-2 px-4 bg-primary rounded-full text-neutral"
@@ -104,43 +106,42 @@ function HomePage() {
               </div>,
             ]}
           />
+
           <div
             ref={addRef}
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               setAddClicked(true);
             }}
-            className={`group  h-10 p-2 rounded-full bg-primary flex justify-center items-center transition-all ease-in-out ${
-              addClicked
-                ? "w-96 justify-around"
-                : "w-12 hover:w-16 hover:cursor-pointer"
+            className={`group h-10 p-2 rounded-full bg-primary flex justify-center items-center transition-all ease-in-out ${
+              addClicked ? "w-96" : "w-12 hover:w-16 hover:cursor-pointer"
             }`}
           >
-            <IoAdd
-              className={`${
-                addClicked ? "hidden" : ""
-              } text-neutral scale-150  group-hover:hidden`}
-            />
-            <InputFeild
-              type="text"
-              id="url"
-              name="url"
-              placeholder="Drop your url"
-              extra={`${
-                addClicked
-                  ? "block h-8 w-72 pb-0 text-neutral border-none placeholder:text-neutral focus:outline-0 focus:ouline-offset-0"
-                  : "hidden"
-              }`}
-            />
-            <div
-              onClick={addClickedHandler}
-              className={`${
-                addClicked
-                  ? "hover:cursor-pointer hover:bg-secondry/25 rounded-full py-1 px-2"
-                  : "hidden group-hover:block"
-              } text-neutral`}
-            >
-              Add
-            </div>
+            {!addClicked ? (
+              <>
+                <IoAdd className="text-neutral scale-150  group-hover:hidden" />
+                <div className="hidden group-hover:block text-neutral">Add</div>
+              </>
+            ) : (
+              <form
+                onSubmit={urlSubmitHandler}
+                className="w-full flex justify-around"
+              >
+                <InputFeild
+                  type="text"
+                  id="url"
+                  name="url"
+                  placeholder="Drop your url"
+                  extra="w-64 pb-0 bg-primary border-neutral text-neutral placeholder:text-white focus:outline-0"
+                />
+                <button
+                  type="submit"
+                  className="text-white rounded-full py-1 px-2 hover:bg-secondry/20"
+                >
+                  Add
+                </button>
+              </form>
+            )}
           </div>
         </div>
         <div className="mt-4 w-full rounded-full border-t-2 border-grayL opacity-50" />
