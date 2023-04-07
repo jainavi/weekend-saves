@@ -6,7 +6,7 @@ import Success from "./Success";
 
 function StatusList() {
   const { errorArr, successArr } = useSelector((store) => store.ui);
-  const [parent, enableAnimations] = useAutoAnimate();
+  const [parent] = useAutoAnimate();
 
   return (
     <div

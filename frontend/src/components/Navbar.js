@@ -5,6 +5,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { setLogout } from "../slices/authSlice";
+import DropDown from "./DropDown";
 
 function Navbar() {
   const { isAuth } = useSelector((state) => state.auth);
@@ -55,41 +56,32 @@ function Navbar() {
                 About Us
               </Link>
 
-              <div className="dropdown dropdown-end ">
-                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <DropDown
+                icon={
                   <div className="w-10 rounded-full">
                     <CgProfile className="hidden lg:block w-full h-full" />
                     <GiHamburgerMenu className="lg:hidden w-full h-full" />
                   </div>
-                </label>
-                <ul
-                  tabIndex={0}
-                  className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-primary rounded-box w-52"
-                >
-                  <li>
-                    <Link to="/home" className="lg:hidden">
-                      Home
+                }
+                direction="dropdown-end"
+                options={[
+                  <Link to="/home" className="lg:hidden">
+                    Home
+                  </Link>,
+                  <Link to="/profile" className="justify-between">
+                    Profile
+                  </Link>,
+                  <Link to="/about-us" className="lg:hidden">
+                    About Us
+                  </Link>,
+                  isAuth && (
+                    <Link to="/login" onClick={clickHandler}>
+                      Logout
                     </Link>
-                  </li>
-                  <li>
-                    <Link to="/profile" className="justify-between">
-                      Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/about-us" className="lg:hidden">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    {isAuth && (
-                      <Link to="/login" onClick={clickHandler}>
-                        Logout
-                      </Link>
-                    )}
-                  </li>
-                </ul>
-              </div>
+                  ),
+                ]}
+                optionsStyles="bg-primary w-52"
+              />
             </div>
           </div>
         </div>
