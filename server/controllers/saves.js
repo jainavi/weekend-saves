@@ -48,8 +48,8 @@ exports.getAllPosts = (req, res, next) => {
     });
 };
 
-exports.getSave = (req, res) => {
-  const userId = req.body.userId;
+exports.getSave = (req, res, next) => {
+  const userId = req.userId;
   const saveId = req.body.saveId;
 
   User.findById(userId)
@@ -72,10 +72,6 @@ exports.getSave = (req, res) => {
       err.toDisplay = err.toDisplay || "Oops! an internal error occured";
       next(err);
     });
-};
-
-exports.deleteSave = (req, res) => {
-  const saveId = req.body.saveId;
 };
 
 exports.postSave = (req, res, next) => {
@@ -124,4 +120,49 @@ exports.postSave = (req, res, next) => {
     error.statusCode = 400;
     throw error;
   }
+};
+
+exports.deleteSave = (req, res, next) => {
+  const userId = req.userId;
+  const saveId = req.params.saveId;
+
+  if (!saveId) {
+    const error = new Error("Invalid save id provided");
+    throw error;
+  }
+
+  User.findById(userId)
+    .populate({ path: "saves", select: "_id userOptions" })
+    .then((user) => {
+      const filteredArr = user.saves.filter((e) => {
+        if (e._id.toString() === saveId) {
+          if (e.userOptions.isFavourite) {
+            user.docCount.favourite -= 1;
+          } else if (e.userOptions.isArchived) {
+            user.docCount.archive -= 1;
+          }
+          user.docCount.total -= 1;
+        }
+        return e._id.toString() !== saveId;
+      });
+      if (filteredArr.length === user.saves.length) {
+        const error = new Error("Save not found");
+        error.toDisplay = "Save not found";
+        error.statusCode = 404;
+        throw error;
+      }
+
+      user.saves = filteredArr;
+      return user.save();
+    })
+    .then((result) => {
+      Save.findByIdAndDelete(saveId).then((result) => {
+        res.status(204).send();
+      });
+    })
+    .catch((err) => {
+      err.toDisplay = err.toDisplay || "Oops! an internal error occured";
+      err.statusCode = 500;
+      next(err);
+    });
 };

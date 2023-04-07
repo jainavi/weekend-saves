@@ -111,3 +111,24 @@ export async function postSave(token, url) {
     throw error;
   }
 }
+
+export async function deleteSave(token, saveId) {
+  try {
+    const res = await axios.delete(`${serverUrl}/saves/${saveId}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    console.log(res);
+  } catch (err) {
+    const error = new Error("Failed to delete save");
+    error.data = [];
+    if (err.response) {
+      error.message = err.response.data.message;
+      error.data = err.response.data.data.map((body) => body.msg);
+    }
+    throw error;
+  }
+}
+
+export async function archiveSave(token, saveId) {}
