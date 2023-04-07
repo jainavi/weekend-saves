@@ -2,62 +2,74 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { BiHomeAlt } from "react-icons/bi";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineCloudUpload } from "react-icons/ai";
 import { BsArchive } from "react-icons/bs";
 import { IoAdd } from "react-icons/io5";
 
 import { getSaves, postSave } from "../../util/api";
-import { pushError } from "../../slices/uiSlice";
+import { pushError, pushSuccess } from "../../slices/uiSlice";
 import Select from "../../components/Select";
 import LoadingCard from "../../components/LoadingCard";
 import InputFeild from "../../components/Input";
+import SaveCards from "./SaveCards";
 
 function HomePage() {
   const { token } = useSelector((state) => state.auth);
-  const [isLoading, setIsLoading] = useState(true);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [maxPageNumber, setMaxPageNumber] = useState(1);
-  const [saves, setSaves] = useState([]);
-  const [type, setType] = useState("all");
-  const addRef = useRef(null);
-  const [addClicked, setAddClicked] = useState(false);
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [saveStatus, setSaveStatus] = useState({
+    savesLoading: true,
+    saveUploading: false,
+  });
+  const [saves, setSaves] = useState([]);
+  const [pageState, setPageState] = useState({ currPageNum: 1, maxPageNum: 1 });
+  const [type, setType] = useState("all");
+  const [addClicked, setAddClicked] = useState(false);
+  const addRef = useRef(null);
 
   const savesFetch = async () => {
+    setSaveStatus((prevState) => ({ ...prevState, savesLoading: true }));
     try {
-      const res = await getSaves(token, type, pageNumber);
+      const res = await getSaves(token, type, pageState.currPageNum);
       setSaves(res.saves);
-      setMaxPageNumber(Math.ceil(res.docCount / 6));
-      setSearchParams({ type, page: pageNumber });
-      setIsLoading(false);
+      setPageState((prevState) => ({
+        ...prevState,
+        maxPageNum: Math.ceil(res.docCount / 6),
+      }));
+      setSearchParams({ type, page: pageState.currPageNum });
     } catch (err) {
       dispatch(pushError(err.message));
-      setIsLoading(false);
     }
+    setSaveStatus((prevState) => ({ ...prevState, savesLoading: false }));
   };
 
   useEffect(() => {
-    setIsLoading(true);
     savesFetch();
-  }, [pageNumber, type, token, dispatch, setSearchParams]);
+  }, [pageState.currPageNum, type, token, dispatch, setSearchParams]);
 
   const urlSubmitHandler = async (event) => {
+    setSaveStatus((prevState) => ({ ...prevState, saveUploading: true }));
     event.preventDefault();
     const formData = new FormData(event.target);
     const url = formData.get("url");
     setAddClicked(false);
     try {
       await postSave(token, url);
-      savesFetch();
+      await savesFetch();
+      dispatch(pushSuccess("New save added!"));
     } catch (err) {
       dispatch(pushError(err.message));
     }
+    setSaveStatus((prevState) => ({ ...prevState, saveUploading: false }));
+    setAddClicked(false);
   };
 
   const typeChangeHandler = async (type) => {
-    setSearchParams({ type, page: pageNumber });
-    setPageNumber(1);
+    setSearchParams({ type, page: pageState.currPageNum });
+    setPageState((prevState) => ({
+      ...prevState,
+      currPageNum: 1,
+    }));
     setType(type);
   };
 
@@ -114,13 +126,24 @@ function HomePage() {
               setAddClicked(true);
             }}
             className={`group h-10 p-2 rounded-full bg-primary flex justify-center items-center transition-all ease-in-out ${
-              addClicked ? "w-96" : "w-12 hover:w-16 hover:cursor-pointer"
+              saveStatus.saveUploading
+                ? "w-auto hover:cursor-wait"
+                : addClicked
+                ? "w-96"
+                : "w-10 hover:w-16 hover:cursor-pointer"
             }`}
           >
-            {!addClicked ? (
+            {saveStatus.saveUploading ? (
+              <>
+                <AiOutlineCloudUpload className="text-neutral w-6 h-6 animate-bounce" />
+                <p className="mx-2 text-neutral">Saving...</p>
+              </>
+            ) : !addClicked ? (
               <>
                 <IoAdd className="text-neutral scale-150  group-hover:hidden" />
-                <div className="hidden group-hover:block text-neutral">Add</div>
+                <div className="hidden group-hover:block text-neutral">
+                  Save
+                </div>
               </>
             ) : (
               <form
@@ -138,7 +161,7 @@ function HomePage() {
                   type="submit"
                   className="text-white rounded-full py-1 px-2 hover:bg-secondry/20"
                 >
-                  Add
+                  Save
                 </button>
               </form>
             )}
@@ -147,71 +170,58 @@ function HomePage() {
         <div className="mt-4 w-full rounded-full border-t-2 border-grayL opacity-50" />
 
         <div className="mt-8 grid grid-cols-3">
-          {!isLoading
-            ? saves.map((save) => {
-                return (
-                  <div
-                    className="card card-compact w-96 h-80 mb-4 justify-self-center border border-grayL border-opacity-50 hover:cursor-pointer transition-transform ease-in-out hover:scale-[101%] hover:drop-shadow-xl"
-                    key={save._id}
-                  >
-                    <figure
-                      className="h-40 bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url('${save.image}')`,
-                      }}
-                    ></figure>
-                    <div className="card-body bg-neutral text-gray rounded-b-2xl">
-                      <h2 className="card-title text-black">
-                        {save.title}
-                        <div className="badge badge-error w-32 text-neutral">
-                          {Math.round(save.ttr / 60) + " Min"}
-                        </div>
-                      </h2>
-                      <p>{save.source}</p>
-                      <div className="card-actions justify-end">
-                        <div className="badge badge-outline">Tag-1</div>
-                        <div className="badge badge-outline">Tag-2</div>
-                        <div className="badge badge-outline">+5 more</div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            : Array.from({ length: 6 }, (_, index) => (
+          {saveStatus.savesLoading
+            ? Array.from({ length: 6 }, (_, index) => (
                 <LoadingCard key={index} />
-              ))}
+              ))
+            : saves.map((save) => {
+                return (
+                  <SaveCards
+                    key={save._id}
+                    saveData={save}
+                    onDelete={savesFetch}
+                  />
+                );
+              })}
         </div>
         <div className="btn-group mt-8 w-full justify-center">
           <button
             className={`btn border bg-neutral border-grayL ${
-              pageNumber < 2 || isLoading
+              pageState.currPageNum < 2 || saveStatus.savesLoading
                 ? "opacity-25 hover:bg-neutral hover:cursor-not-allowed"
                 : " hover:bg-primary"
             }`}
             style={{ borderRadius: "999px" }}
             onClick={() => {
-              pageNumber < 2 ||
-                isLoading ||
-                setPageNumber((prevState) => prevState - 1);
+              pageState.currPageNum < 2 ||
+                saveStatus.savesLoading ||
+                setPageState((prevState) => ({
+                  ...prevState,
+                  currPageNum: prevState.currPageNum - 1,
+                }));
             }}
           >
             «
           </button>
 
           <button className="p-3 text-black bg-neutral hover:bg-neutral">
-            Page {pageNumber}
+            Page {pageState.currPageNum}
           </button>
           <button
             className={`btn border bg-neutral border-grayL ${
-              pageNumber >= maxPageNumber || isLoading
+              pageState.currPageNum >= pageState.maxPageNum ||
+              saveStatus.savesLoading
                 ? "opacity-25 hover:bg-neutral hover:cursor-not-allowed"
                 : " hover:bg-primary"
             }`}
             style={{ borderRadius: "999px" }}
             onClick={() => {
-              pageNumber >= maxPageNumber ||
-                isLoading ||
-                setPageNumber((prevState) => prevState + 1);
+              pageState.currPageNum >= pageState.maxPageNum ||
+                saveStatus.savesLoading ||
+                setPageState((prevState) => ({
+                  ...prevState,
+                  currPageNum: prevState.currPageNum + 1,
+                }));
             }}
           >
             »
