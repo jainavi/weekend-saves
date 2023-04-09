@@ -6,16 +6,12 @@ exports.getAllPosts = (req, res, next) => {
   const userId = req.userId;
   const { type, tags, page } = req.query;
 
-  const matchObj = {
-    "userOptions.isFavourite": type === "favourite",
-    "userOptions.isArchived": type === "archive",
-  };
   const limitPerPage = 6;
 
   User.findById(userId)
     .populate({
       path: "saves",
-      match: type === "all" || !type ? undefined : matchObj,
+      match: type === "0" ? undefined : { "userOptions.type": type },
       select: "-content -modifiedContent",
       options: {
         sort: { createdAt: -1 },
@@ -83,7 +79,7 @@ exports.postSave = (req, res, next) => {
           .then((result) => {
             User.findById(req.userId).then((user) => {
               user.saves.push(result._id);
-              user.docCount.total += 1;
+              user.docCount[0] += 1;
               user.save().then((result) => {
                 res.status(201).json({
                   message: "Post created successfully!",
@@ -112,7 +108,7 @@ exports.postSave = (req, res, next) => {
 
 exports.deleteSave = (req, res, next) => {
   const userId = req.userId;
-  const saveId = req.params.saveId;
+  const { saveId } = req.params;
 
   if (!saveId) {
     const error = new Error("Invalid save id provided");
@@ -124,12 +120,19 @@ exports.deleteSave = (req, res, next) => {
     .then((user) => {
       const filteredArr = user.saves.filter((e) => {
         if (e._id.toString() === saveId) {
-          if (e.userOptions.isFavourite) {
-            user.docCount.favourite -= 1;
-          } else if (e.userOptions.isArchived) {
-            user.docCount.archive -= 1;
+          switch (e.userOptions.type) {
+            case 0:
+              user.docCount[0] -= 1;
+              break;
+            case 1:
+              user.docCount[0] -= 1;
+              user.docCount[1] -= 1;
+              break;
+            case 2:
+              user.docCount[2] -= 1;
+            default:
+              break;
           }
-          user.docCount.total -= 1;
         }
         return e._id.toString() !== saveId;
       });
@@ -146,6 +149,70 @@ exports.deleteSave = (req, res, next) => {
     .then((result) => {
       Save.findByIdAndDelete(saveId).then((result) => {
         res.status(204).send();
+      });
+    })
+    .catch((err) => {
+      err.toDisplay = err.toDisplay || "Oops! an internal error occured";
+      err.statusCode = 500;
+      next(err);
+    });
+};
+
+exports.changeType = (req, res, next) => {
+  const userId = req.userId;
+  const { saveId, type } = req.body;
+
+  if (!saveId || !type) {
+    const error = new Error("Invalid requests");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  User.findById(userId)
+    .populate({
+      path: "saves",
+      select: "userOptions",
+    })
+    .then((user) => {
+      user.saves.map((e) => {
+        if (e._id.toString() === saveId) {
+          let eType = e.userOptions.type;
+          switch (eType) {
+            case 0:
+              if (type === 2 || type === 0) {
+                user.docCount[0] -= 1;
+              }
+              user.docCount[type] += 1;
+              break;
+            case 1:
+              user.docCount[1] -= 1;
+              if (type === 1 || type === 2) {
+                user.docCount[type] += 1;
+                type === 2 ? (user.docCount[0] -= 1) : null;
+              }
+              break;
+            case 2:
+              user.docCount[2] -= 1;
+              user.docCount[type] += 1;
+              if (type === 1) {
+                user.docCount[0] += 1;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+        return e;
+      });
+      return user.save();
+    })
+    .then(() => {
+      Save.findById(saveId).then((save) => {
+        save.userOptions.type = type;
+
+        save.save().then(() => {
+          res.status(204).send();
+        });
       });
     })
     .catch((err) => {

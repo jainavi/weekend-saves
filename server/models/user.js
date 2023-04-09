@@ -21,9 +21,8 @@ const userSchema = new Schema({
   lastName: String,
   saves: [{ type: Schema.Types.ObjectId, ref: "Save" }],
   docCount: {
-    total: { type: Number, default: 0 },
-    favourite: { type: Number, default: 0 },
-    archive: { type: Number, default: 0 },
+    type: [Number],
+    default: [0, 0, 0],
   },
 });
 

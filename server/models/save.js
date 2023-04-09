@@ -19,13 +19,9 @@ const saveSchema = new Schema(
       required: true,
     },
     userOptions: {
-      isArchived: {
-        type: Boolean,
-        default: false,
-      },
-      isFavourite: {
-        type: Boolean,
-        default: false,
+      type: {
+        type: Number,
+        default: 0,
       },
       tags: {
         type: [String],
