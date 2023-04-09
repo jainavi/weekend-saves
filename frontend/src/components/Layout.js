@@ -9,11 +9,14 @@ import { pushSuccess } from "../slices/uiSlice";
 
 function Layout() {
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
     if (!token || !expiryDate) {
+      dispatch(setLogout());
       return;
     }
     if (new Date(expiryDate) <= new Date()) {
