@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TYPES_ITS } from "./global";
 
 const serverUrl = "http://localhost:8080";
 
@@ -60,8 +61,10 @@ export async function loginHandler(data) {
   }
 }
 
-export async function getSaves(token, type = "all", page = 1) {
+export async function getSaves(token, page = 1, type = 0) {
   let response;
+  type = TYPES_ITS[type];
+
   try {
     const res = await axios.get(
       `${serverUrl}/saves?type=${type}&page=${page}`,
@@ -112,6 +115,10 @@ export async function postSave(token, url) {
   }
 }
 
+export async function favouriteSave(token, saveId) {}
+
+export async function archiveSave(token, saveId) {}
+
 export async function deleteSave(token, saveId) {
   try {
     const res = await axios.delete(`${serverUrl}/saves/${saveId}`, {
@@ -130,5 +137,3 @@ export async function deleteSave(token, saveId) {
     throw error;
   }
 }
-
-export async function archiveSave(token, saveId) {}

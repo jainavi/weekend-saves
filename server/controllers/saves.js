@@ -5,18 +5,18 @@ const { fromUrlExtract } = require("../util/articleExtractor");
 exports.getAllPosts = (req, res, next) => {
   const userId = req.userId;
   const { type, tags, page } = req.query;
-  const matchFilter =
-    {
-      archive: { "userOptions.isArchived": true },
-      favourite: { "userOptions.isFavourite": true },
-    }[type] || {};
+
+  const matchObj = {
+    "userOptions.isFavourite": type === "favourite",
+    "userOptions.isArchived": type === "archive",
+  };
   const limitPerPage = 6;
 
   User.findById(userId)
     .populate({
       path: "saves",
+      match: type === "all" || !type ? undefined : matchObj,
       select: "-content -modifiedContent",
-      match: matchFilter,
       options: {
         sort: { createdAt: -1 },
         limit: limitPerPage,
@@ -24,21 +24,9 @@ exports.getAllPosts = (req, res, next) => {
       },
     })
     .then((result) => {
-      let docCount;
-      switch (type) {
-        case "favourite":
-          docCount = result.docCount.favourite;
-          break;
-        case "archive":
-          docCount = result.docCount.archive;
-          break;
-        default:
-          docCount = result.docCount.total;
-          break;
-      }
       res.status(200).json({
         message: "Saves fetched successfully",
-        result: { saves: result.saves, docCount },
+        result: { saves: result.saves, docCount: result.docCount },
       });
     })
     .catch((err) => {
