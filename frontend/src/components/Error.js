@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 
 import TimeOutBar from "./TimeOutBar";
-import { popError } from "../slices/uiSlice";
+import { popError } from "../store/ui/uiSlice";
 
 function Error({ id, children }) {
   const dispatch = useDispatch();

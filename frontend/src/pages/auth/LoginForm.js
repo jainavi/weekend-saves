@@ -6,9 +6,9 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Label from "../../components/Label";
 import { loginHandler } from "../../util/api";
-import { pushSuccess, pushError } from "../../slices/uiSlice";
-import { setLogin, setLogout } from "../../slices/authSlice";
-import { setUserDetails } from "../../slices/userSlice";
+import { pushSuccess, pushError } from "../../store/ui/uiSlice";
+import { setLogin, setLogout } from "../../store/auth/authSlice";
+import { setUserDetails } from "../../store/user/userSlice";
 
 function LoginForm() {
   const navigate = useNavigate();

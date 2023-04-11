@@ -3,9 +3,8 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import store from "./store";
+import store from "./store/store";
 import "./index.css";
-// import App from "./App";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
 import AuthPage from "./pages/auth/index";

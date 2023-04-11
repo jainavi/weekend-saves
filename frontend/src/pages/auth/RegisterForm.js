@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Label from "../../components/Label";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import { pushError, pushSuccess } from "../../slices/uiSlice";
+import { pushError, pushSuccess } from "../../store/ui/uiSlice";
 import { registerFormValidator } from "../../util/validator";
 import { registerHandler } from "../../util/api";
 

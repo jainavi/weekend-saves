@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 
 import Navbar from "./Navbar";
 import StatusList from "./StatusList";
-import { setLogin, setLogout } from "../slices/authSlice";
-import { pushSuccess } from "../slices/uiSlice";
+import { setLogin, setLogout } from "../store/auth/authSlice";
+import { pushSuccess } from "../store/ui/uiSlice";
 
 function Layout() {
   const navigate = useNavigate();

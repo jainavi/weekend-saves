@@ -8,8 +8,8 @@ import { IoAdd } from "react-icons/io5";
 
 import { postSave } from "../../util/api";
 import { TYPES_ITS, TYPE_STI } from "../../util/global";
-import { addNewSave } from "../../slices/userSlice";
-import { pushError, pushSuccess } from "../../slices/uiSlice";
+import { addNewSave } from "../../store/user/userSlice";
+import { pushError, pushSuccess } from "../../store/ui/uiSlice";
 import Select from "../../components/Select";
 import InputFeild from "../../components/Input";
 import SaveCardsGrid from "./SaveCardsGrid";

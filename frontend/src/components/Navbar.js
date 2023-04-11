@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { setLogout } from "../slices/authSlice";
+import { setLogout } from "../store/auth/authSlice";
 import DropDown from "./DropDown";
 
 function Navbar() {
