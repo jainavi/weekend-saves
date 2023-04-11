@@ -3,7 +3,11 @@ import { useEffect } from "react";
 
 import SaveCards from "./SaveCards";
 import LoadingCard from "../../components/LoadingCard";
-import { loadSaves } from "../../slices/userSlice";
+import {
+  deleteSave,
+  loadSaves,
+  typeChange,
+} from "../../store/user/userActions";
 
 export default function SaveCardsGrid({ type, pageNum }) {
   const dispatch = useDispatch();
@@ -21,10 +25,14 @@ export default function SaveCardsGrid({ type, pageNum }) {
     ) {
       dispatch(loadSaves({ type, pageNum }));
     }
-  }, [type, pageNum]);
+  }, [type, pageNum, saves, savesArr.length]);
 
-  const deleteHandler = (saveId) => {
-    // Code
+  const deleteHandler = (type, saveId) => {
+    dispatch(deleteSave({ type, saveId }));
+  };
+
+  const typeChangeHandler = (type, saveId, toType) => {
+    dispatch(typeChange({ type, saveId, toType }));
   };
 
   return (
@@ -43,9 +51,8 @@ export default function SaveCardsGrid({ type, pageNum }) {
               <SaveCards
                 key={save._id}
                 saveData={save}
-                onDelete={() => {
-                  deleteHandler(save._id);
-                }}
+                onDelete={deleteHandler}
+                onChange={typeChangeHandler}
               />
             );
           })}

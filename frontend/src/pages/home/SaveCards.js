@@ -1,32 +1,27 @@
 import { SlOptionsVertical } from "react-icons/sl";
-import { AiOutlineHeart } from "react-icons/ai";
-import { BsTrash, BsArchive } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { BsTrash, BsArchive, BsArchiveFill } from "react-icons/bs";
 
 import DropDown from "../../components/DropDown";
-import { deleteSave } from "../../util/api";
-import { pushError } from "../../slices/uiSlice";
 
-export default function SaveCards({ saveData, onDelete }) {
-  const { token } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-
+export default function SaveCards({ saveData, onDelete, onChange }) {
   const saveId = saveData._id;
+  const type = saveData.userOptions.type;
 
-  const archiveSaveHandler = async () => {
-    try {
-    } catch (err) {
-      dispatch(pushError(err.message));
+  const onFavouriteClickHandler = () => {
+    if (type === 1) {
+      onChange(type, saveId, 0);
+      return;
     }
+    onChange(type, saveId, 1);
   };
 
-  const deleteSaveHandler = async () => {
-    try {
-      await deleteSave(token, saveId);
-      onDelete();
-    } catch (err) {
-      dispatch(pushError(err.message));
+  const onArchiveClickHandler = () => {
+    if (type === 2) {
+      onChange(type, saveId, 0);
+      return;
     }
+    onChange(type, saveId, 2);
   };
 
   return (
@@ -54,15 +49,19 @@ export default function SaveCards({ saveData, onDelete }) {
               icon={<SlOptionsVertical />}
               direction="dropdown-top dropdown-end"
               options={[
-                <p className="text-neutral">
-                  <AiOutlineHeart /> Favourite
+                <p className="text-neutral" onClick={onFavouriteClickHandler}>
+                  {type === 1 ? <AiFillHeart /> : <AiOutlineHeart />}{" "}
+                  {type === 1 ? "Favourited" : "Favourite"}
                 </p>,
-                <p className="text-neutral" onClick={archiveSaveHandler}>
-                  <BsArchive /> Archive
+                <p className="text-neutral" onClick={onArchiveClickHandler}>
+                  {type === 2 ? <BsArchiveFill /> : <BsArchive />}
+                  {type === 2 ? "Archived" : "Archive"}
                 </p>,
                 <p
                   className="text-neutral hover:bg-error/30"
-                  onClick={deleteSaveHandler}
+                  onClick={() => {
+                    onDelete(type, saveData._id);
+                  }}
                 >
                   <BsTrash />
                   Delete

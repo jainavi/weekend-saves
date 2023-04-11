@@ -1,3 +1,5 @@
+const { validationResult } = require("express-validator");
+
 const Save = require("../models/save");
 const User = require("../models/user");
 const { fromUrlExtract } = require("../util/articleExtractor");
@@ -11,7 +13,10 @@ exports.getAllPosts = (req, res, next) => {
   User.findById(userId)
     .populate({
       path: "saves",
-      match: type === "0" ? undefined : { "userOptions.type": type },
+      match:
+        type === "0"
+          ? { $or: [{ "userOptions.type": "0" }, { "userOptions.type": "1" }] }
+          : { "userOptions.type": type },
       select: "-content -modifiedContent",
       options: {
         sort: { createdAt: -1 },
@@ -59,61 +64,51 @@ exports.getSave = (req, res, next) => {
 };
 
 exports.postSave = (req, res, next) => {
-  const method = req.body.method;
-  let save;
-  if (method === "URL") {
-    const url = req.body.url;
-    if (!url) {
-      const error = new Error("url not provided");
-      error.statusCode = 400;
-      throw error;
-    }
-
-    fromUrlExtract(url, req.userId)
-      .then((article) => {
-        let newSave = new Save({ ...article });
-        const { content, modifiedContent, ...rest } = newSave._doc;
-        save = rest;
-        newSave
-          .save()
-          .then((result) => {
-            User.findById(req.userId).then((user) => {
-              user.saves.push(result._id);
-              user.docCount[0] += 1;
-              user.save().then((result) => {
-                res.status(201).json({
-                  message: "Post created successfully!",
-                  result: save,
-                });
-              });
-            });
-          })
-          .catch((err) => {
-            err.toDisplay = "Oops! an internal error occured";
-            err.statusCode = 500;
-            next(err);
-          });
-      })
-      .catch((err) => {
-        err.toDisplay = "Can't fetch your post";
-        err.statusCode = 500;
-        next(err);
-      });
-  } else {
-    const error = new Error("valid method not provided");
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    const error = new Error("Invalid request");
     error.statusCode = 400;
     throw error;
   }
+
+  let save;
+  const url = req.body.url;
+
+  fromUrlExtract(url, req.userId)
+    .then((article) => {
+      let newSave = new Save({ ...article });
+      const { content, modifiedContent, ...rest } = newSave._doc;
+      save = rest;
+      newSave
+        .save()
+        .then((result) => {
+          User.findById(req.userId).then((user) => {
+            user.saves.push(result._id);
+            user.docCount[0] += 1;
+            user.save().then((result) => {
+              res.status(201).json({
+                message: "Post created successfully!",
+                result: save,
+              });
+            });
+          });
+        })
+        .catch((err) => {
+          err.toDisplay = "Oops! an internal error occured";
+          err.statusCode = 500;
+          next(err);
+        });
+    })
+    .catch((err) => {
+      err.toDisplay = "Can't fetch your post";
+      err.statusCode = 500;
+      next(err);
+    });
 };
 
 exports.deleteSave = (req, res, next) => {
   const userId = req.userId;
   const { saveId } = req.params;
-
-  if (!saveId) {
-    const error = new Error("Invalid save id provided");
-    throw error;
-  }
 
   User.findById(userId)
     .populate({ path: "saves", select: "_id userOptions" })
@@ -159,14 +154,15 @@ exports.deleteSave = (req, res, next) => {
 };
 
 exports.changeType = (req, res, next) => {
-  const userId = req.userId;
-  const { saveId, type } = req.body;
-
-  if (!saveId || !type) {
-    const error = new Error("Invalid requests");
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    const error = new Error("Invalid request");
     error.statusCode = 400;
     throw error;
   }
+
+  const userId = req.userId;
+  const { saveId, type } = req.body;
 
   User.findById(userId)
     .populate({

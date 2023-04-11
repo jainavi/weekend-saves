@@ -7,7 +7,7 @@ import {
   setUserDetails as setUserDetailsFunction,
   addNewSave as addNewSaveFunctions,
 } from "./userActions";
-import { deleteSaveFromArray, balanceCount } from "../util";
+import { balanceCount } from "../util";
 
 const initialState = {
   userId: null,

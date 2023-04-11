@@ -1,5 +1,4 @@
 import axios from "axios";
-import { TYPES_ITS } from "./global";
 
 const serverUrl = "http://localhost:8080";
 
@@ -61,9 +60,8 @@ export async function loginHandler(data) {
   }
 }
 
-export async function getSaves(token, page = 1, type = 0) {
+export async function getSavesApi(token, page = 1, type = 0) {
   let response;
-  type = TYPES_ITS[type];
 
   try {
     const res = await axios.get(
@@ -115,18 +113,38 @@ export async function postSave(token, url) {
   }
 }
 
-export async function favouriteSave(token, saveId) {}
-
-export async function archiveSave(token, saveId) {}
-
-export async function deleteSave(token, saveId) {
+export async function typeChangeApi(token, type, saveId) {
   try {
-    const res = await axios.delete(`${serverUrl}/saves/${saveId}`, {
+    await axios.put(
+      `${serverUrl}/saves/change-type`,
+      {
+        type,
+        saveId,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+  } catch (err) {
+    const error = new Error("Oops! something went wrong");
+    error.data = [];
+    if (err.response) {
+      error.message = err.response.data.message;
+      error.data = err.response.data.data.map((body) => body.msg);
+    }
+    throw error;
+  }
+}
+
+export async function deleteSaveApi(token, saveId) {
+  try {
+    await axios.delete(`${serverUrl}/saves/${saveId}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
-    console.log(res);
   } catch (err) {
     const error = new Error("Failed to delete save");
     error.data = [];
